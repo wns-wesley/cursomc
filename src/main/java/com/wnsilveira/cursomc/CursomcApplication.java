@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.wnsilveira.cursomc.domain.Categoria;
 import com.wnsilveira.cursomc.domain.Cidade;
+import com.wnsilveira.cursomc.domain.Cliente;
+import com.wnsilveira.cursomc.domain.Endereco;
 import com.wnsilveira.cursomc.domain.Estado;
 import com.wnsilveira.cursomc.domain.Produto;
+import com.wnsilveira.cursomc.domain.enums.TipoCliente;
 import com.wnsilveira.cursomc.repositories.CategoriaRepository;
 import com.wnsilveira.cursomc.repositories.CidadeRepository;
+import com.wnsilveira.cursomc.repositories.ClienteRepository;
+import com.wnsilveira.cursomc.repositories.EnderecoRepository;
 import com.wnsilveira.cursomc.repositories.EstadoRepository;
 import com.wnsilveira.cursomc.repositories.ProdutoRepository;
 
@@ -27,6 +32,10 @@ public class CursomcApplication implements CommandLineRunner {
 	private CidadeRepository cidadeRepository;
 	@Autowired
 	private EstadoRepository estadoRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -49,6 +58,11 @@ public class CursomcApplication implements CommandLineRunner {
 		Cidade c2 = new Cidade("São Paulo", est2);
 		Cidade c3 = new Cidade("Campinas", est2);
 		
+		Cliente cli1 = new Cliente("Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOA_FISICA);
+		
+		Endereco e1 = new Endereco("Rua Flores", "300", "Apto 203", "Jardim", "86030-000", cli1, c1);
+		Endereco e2 = new Endereco("Av Matos", "100", "Sala 800", "Centro", "86030-100", cli1, c2);
+		
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
 		cat2.getProdutos().add(p2);
 		
@@ -59,11 +73,17 @@ public class CursomcApplication implements CommandLineRunner {
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
 		
+		cli1.getTelefones().addAll(Arrays.asList("3333-3333", "3636-3636"));
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 		
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 		
 	}
 }
